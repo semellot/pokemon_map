@@ -21,5 +21,5 @@ class PokemonEntity(models.Model):
     defence = models.IntegerField(null=True)
     stamina = models.IntegerField(null=True)
 
-    def __str_(self):
+    def __str__(self):
         return f'{self.lat} - {self.lon}'
