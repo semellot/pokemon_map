@@ -66,6 +66,12 @@ def show_pokemon(request, pokemon_id):
         "img_url": request.build_absolute_uri(object_pokemon.image.url),
         "description": object_pokemon.description
     }
+    if object_pokemon.evolution_from:
+        pokemon["previous_evolution"] = {
+            "pokemon_id": object_pokemon.evolution_from.pk,
+            "title_ru": object_pokemon.evolution_from.text,
+            "img_url": request.build_absolute_uri(object_pokemon.evolution_from.image.url)
+        }
 
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     datetime_now = timezone.localtime(timezone.now())
