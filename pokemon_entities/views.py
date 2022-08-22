@@ -12,7 +12,11 @@ DEFAULT_IMAGE_URL = (
 )
 
 
-def add_pokemon(folium_map, lat, lon, image_url=DEFAULT_IMAGE_URL):
+def add_pokemon(folium_map, lat, lon, pokemon_properties, image_url=DEFAULT_IMAGE_URL):
+    popup = ""
+    for property_name, property_value in pokemon_properties.items():
+        popup = f"{popup}{property_name}: {property_value}<br>"
+
     icon = folium.features.CustomIcon(
         image_url,
         icon_size=(50, 50),
@@ -22,6 +26,7 @@ def add_pokemon(folium_map, lat, lon, image_url=DEFAULT_IMAGE_URL):
         # Warning! `tooltip` attribute is disabled intentionally
         # to fix strange folium cyrillic encoding bug
         icon=icon,
+        popup=popup
     ).add_to(folium_map)
 
 
@@ -34,9 +39,17 @@ def show_all_pokemons(request):
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     for pokemon_entity in pokemon_entities:
         pokemon = pokemon_entity.pokemon
+        pokemon_properties = {
+            "level": pokemon_entity.level,
+            "health": pokemon_entity.health,
+            "strength": pokemon_entity.strength,
+            "defence": pokemon_entity.defence,
+            "stamina": pokemon_entity.stamina,
+        }
         add_pokemon(
             folium_map, pokemon_entity.lat,
             pokemon_entity.lon,
+            pokemon_properties,
             request.build_absolute_uri(pokemon.image.url)
         )
 
@@ -86,9 +99,17 @@ def show_pokemon(request, pokemon_id):
         disappeared_at__gt=datetime_now
     )
     for pokemon_entity in pokemon_entities:
+        pokemon_properties = {
+            "level": pokemon_entity.level,
+            "health": pokemon_entity.health,
+            "strength": pokemon_entity.strength,
+            "defence": pokemon_entity.defence,
+            "stamina": pokemon_entity.stamina,
+        }
         add_pokemon(
             folium_map, pokemon_entity.lat,
             pokemon_entity.lon,
+            pokemon_properties,
             request.build_absolute_uri(object_pokemon.image.url)
         )
 
