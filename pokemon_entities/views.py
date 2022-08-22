@@ -61,6 +61,8 @@ def show_pokemon(request, pokemon_id):
     object_pokemon = get_object_or_404(Pokemon, pk=pokemon_id)
     pokemon = {
         "title_ru": object_pokemon.text,
+        "title_en": object_pokemon.text_en,
+        "title_jp": object_pokemon.text_jp,
         "img_url": request.build_absolute_uri(object_pokemon.image.url),
         "description": object_pokemon.description
     }
