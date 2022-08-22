@@ -1,6 +1,14 @@
 from django.db import models
 
 
+class PokemonElementType(models.Model):
+    """Стихия покемона"""
+    title = models.CharField(max_length=200, verbose_name="Название")
+
+    def __str__(self):
+        return self.title
+
+
 class Pokemon(models.Model):
     """Покемон"""
     text = models.CharField(max_length=200, verbose_name="Название")
@@ -8,7 +16,8 @@ class Pokemon(models.Model):
     text_jp = models.CharField(max_length=200, blank=True, verbose_name="Название (JP)")
     image = models.ImageField(blank=True, verbose_name="Изображение")
     description = models.TextField(blank=True, verbose_name="Описание")
-    previous_evolution = models.ForeignKey('Pokemon', on_delete=models.SET_NULL,
+    element_type = models.ManyToManyField(PokemonElementType, verbose_name="Стихия")
+    previous_evolution = models.ForeignKey("Pokemon", on_delete=models.SET_NULL,
         blank=True, null=True, verbose_name="Предыдушая эволюция")
 
     def __str__(self):
