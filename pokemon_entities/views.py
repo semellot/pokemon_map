@@ -3,6 +3,7 @@ import json
 
 from django.http import HttpResponseNotFound
 from django.shortcuts import render
+from django.utils import timezone
 from .models import Pokemon, PokemonEntity
 
 MOSCOW_CENTER = [55.751244, 37.618423]
@@ -27,7 +28,11 @@ def add_pokemon(folium_map, lat, lon, image_url=DEFAULT_IMAGE_URL):
 
 
 def show_all_pokemons(request):
-    pokemon_entities = PokemonEntity.objects.all()
+    datetime_now = timezone.localtime(timezone.now())
+    pokemon_entities = PokemonEntity.objects.filter(
+        appeared_at__lt=datetime_now,
+        disappeared_at__gt=datetime_now
+    )
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     for pokemon_entity in pokemon_entities:
         pokemon = pokemon_entity.pokemon
