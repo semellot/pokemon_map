@@ -7,14 +7,16 @@ class Pokemon(models.Model):
     text_jp = models.CharField(max_length=200, blank=True)
     image = models.ImageField(blank=True)
     description = models.TextField(blank=True)
-    evolution_from = models.ForeignKey('Pokemon', on_delete=models.SET_NULL, blank=True, null=True)
+    previous_evolution = models.ForeignKey('Pokemon', on_delete=models.SET_NULL,
+        blank=True, null=True)
 
     def __str__(self):
         return self.text
 
 
 class PokemonEntity(models.Model):
-    pokemon = models.ForeignKey(Pokemon, on_delete=models.SET_DEFAULT, default=1, blank=True)
+    pokemon = models.ForeignKey(Pokemon, on_delete=models.SET_DEFAULT,
+        default=1, blank=True)
     lat = models.FloatField()
     lon = models.FloatField()
     appeared_at = models.DateTimeField(null=True)
