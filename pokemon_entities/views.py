@@ -61,9 +61,10 @@ def show_pokemon(request, pokemon_id):
     object_pokemon = get_object_or_404(Pokemon, pk=pokemon_id)
     pokemon = {
         "title_ru": object_pokemon.text,
-        "img_url": request.build_absolute_uri(object_pokemon.image.url)
+        "img_url": request.build_absolute_uri(object_pokemon.image.url),
+        "description": object_pokemon.description
     }
-    
+
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     datetime_now = timezone.localtime(timezone.now())
     pokemon_entities = PokemonEntity.objects.filter(
