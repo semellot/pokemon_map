@@ -69,23 +69,23 @@ def show_all_pokemons(request):
 
 
 def show_pokemon(request, pokemon_id):
-    object_pokemon = get_object_or_404(Pokemon, pk=pokemon_id)
+    pokemon_object = get_object_or_404(Pokemon, pk=pokemon_id)
 
     pokemon = {
-        "title_ru": object_pokemon.text,
-        "title_en": object_pokemon.text_en,
-        "title_jp": object_pokemon.text_jp,
-        "img_url": request.build_absolute_uri(object_pokemon.image.url),
-        "description": object_pokemon.description,
-        "element_types": object_pokemon.element_types.all()
+        "title_ru": pokemon_object.text,
+        "title_en": pokemon_object.text_en,
+        "title_jp": pokemon_object.text_jp,
+        "img_url": request.build_absolute_uri(pokemon_object.image.url),
+        "description": pokemon_object.description,
+        "element_types": pokemon_object.element_types.all()
     }
-    if object_pokemon.previous_evolution:
+    if pokemon_object.previous_evolution:
         pokemon["previous_evolution"] = {
-            "pokemon_id": object_pokemon.previous_evolution.pk,
-            "title_ru": object_pokemon.previous_evolution.text,
-            "img_url": request.build_absolute_uri(object_pokemon.previous_evolution.image.url)
+            "pokemon_id": pokemon_object.previous_evolution.pk,
+            "title_ru": pokemon_object.previous_evolution.text,
+            "img_url": request.build_absolute_uri(pokemon_object.previous_evolution.image.url)
         }
-    next_evolution = Pokemon.objects.filter(previous_evolution=object_pokemon)
+    next_evolution = Pokemon.objects.filter(previous_evolution=pokemon_object)
     if next_evolution:
         pokemon["next_evolution"] = {
             "pokemon_id": next_evolution[0].pk,
@@ -96,7 +96,7 @@ def show_pokemon(request, pokemon_id):
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     datetime_now = timezone.localtime(timezone.now())
     pokemon_entities = PokemonEntity.objects.filter(
-        pokemon=object_pokemon,
+        pokemon=pokemon_object,
         appeared_at__lt=datetime_now,
         disappeared_at__gt=datetime_now
     )
@@ -112,7 +112,7 @@ def show_pokemon(request, pokemon_id):
             folium_map, pokemon_entity.lat,
             pokemon_entity.lon,
             pokemon_properties,
-            request.build_absolute_uri(object_pokemon.image.url)
+            request.build_absolute_uri(pokemon_object.image.url)
         )
 
     return render(request, 'pokemon.html', context={
