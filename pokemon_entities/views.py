@@ -69,25 +69,25 @@ def show_all_pokemons(request):
 
 
 def show_pokemon(request, pokemon_id):
-    pokemon_object = get_object_or_404(Pokemon, pk=pokemon_id)
+    pokemon = get_object_or_404(Pokemon, pk=pokemon_id)
 
-    pokemon = {
-        "title_ru": pokemon_object.text,
-        "title_en": pokemon_object.text_en,
-        "title_jp": pokemon_object.text_jp,
-        "img_url": request.build_absolute_uri(pokemon_object.image.url),
-        "description": pokemon_object.description,
-        "element_types": pokemon_object.element_types.all()
+    pokemon_context = {
+        "title_ru": pokemon.text,
+        "title_en": pokemon.text_en,
+        "title_jp": pokemon.text_jp,
+        "img_url": request.build_absolute_uri(pokemon.image.url),
+        "description": pokemon.description,
+        "element_types": pokemon.element_types.all()
     }
-    if pokemon_object.previous_evolution:
-        pokemon["previous_evolution"] = {
-            "pokemon_id": pokemon_object.previous_evolution.pk,
-            "title_ru": pokemon_object.previous_evolution.text,
-            "img_url": request.build_absolute_uri(pokemon_object.previous_evolution.image.url)
+    if pokemon.previous_evolution:
+        pokemon_context["previous_evolution"] = {
+            "pokemon_id": pokemon.previous_evolution.pk,
+            "title_ru": pokemon.previous_evolution.text,
+            "img_url": request.build_absolute_uri(pokemon.previous_evolution.image.url)
         }
-    next_evolution = Pokemon.objects.filter(previous_evolution=pokemon_object)
+    next_evolution = Pokemon.objects.filter(previous_evolution=pokemon)
     if next_evolution:
-        pokemon["next_evolution"] = {
+        pokemon_context["next_evolution"] = {
             "pokemon_id": next_evolution[0].pk,
             "title_ru": next_evolution[0].text,
             "img_url": request.build_absolute_uri(next_evolution[0].image.url)
@@ -96,7 +96,7 @@ def show_pokemon(request, pokemon_id):
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     datetime_now = timezone.localtime(timezone.now())
     pokemon_entities = PokemonEntity.objects.filter(
-        pokemon=pokemon_object,
+        pokemon=pokemon,
         appeared_at__lt=datetime_now,
         disappeared_at__gt=datetime_now
     )
@@ -112,9 +112,9 @@ def show_pokemon(request, pokemon_id):
             folium_map, pokemon_entity.lat,
             pokemon_entity.lon,
             pokemon_properties,
-            request.build_absolute_uri(pokemon_object.image.url)
+            request.build_absolute_uri(pokemon.image.url)
         )
 
     return render(request, 'pokemon.html', context={
-        'map': folium_map._repr_html_(), 'pokemon': pokemon
+        'map': folium_map._repr_html_(), 'pokemon': pokemon_context
     })
