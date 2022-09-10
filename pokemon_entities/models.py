@@ -16,7 +16,7 @@ class Pokemon(models.Model):
     text_jp = models.CharField(max_length=200, blank=True, verbose_name="Название (JP)")
     image = models.ImageField(blank=True, verbose_name="Изображение")
     description = models.TextField(blank=True, verbose_name="Описание")
-    element_type = models.ManyToManyField(PokemonElementType, related_name="pokemon_elements", verbose_name="Стихия")
+    element_types = models.ManyToManyField(PokemonElementType, related_name="pokemon_elements", verbose_name="Стихия")
     previous_evolution = models.ForeignKey("Pokemon", on_delete=models.SET_NULL,
         blank=True, null=True, verbose_name="Предыдушая эволюция")
 
