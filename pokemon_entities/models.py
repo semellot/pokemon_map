@@ -29,7 +29,7 @@ class Pokemon(models.Model):
 class PokemonEntity(models.Model):
     """Сущность покемона"""
     pokemon = models.ForeignKey(Pokemon, on_delete=models.SET_NULL,
-        null=True, related_name="pokemons", verbose_name="Покемон")
+        null=True, related_name="pokemon_entities", verbose_name="Покемон")
     lat = models.FloatField(verbose_name="Координата широты")
     lon = models.FloatField(verbose_name="Координата долготы")
     appeared_at = models.DateTimeField(null=True, verbose_name="Дата и время появления")
