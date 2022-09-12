@@ -23,7 +23,7 @@ class Pokemon(models.Model):
         blank=True, null=True, verbose_name="Предыдушая эволюция", related_name="prev_evolutions")
 
     def __str__(self):
-        return self.text
+        return self.name
 
 
 class PokemonEntity(models.Model):
