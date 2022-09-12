@@ -13,9 +13,9 @@ class PokemonElementType(models.Model):
 
 class Pokemon(models.Model):
     """Покемон"""
-    text = models.CharField(max_length=200, verbose_name="Название")
-    text_en = models.CharField(max_length=200, blank=True, verbose_name="Название (EN)")
-    text_jp = models.CharField(max_length=200, blank=True, verbose_name="Название (JP)")
+    name = models.CharField(max_length=200, verbose_name="Название")
+    name_en = models.CharField(max_length=200, blank=True, verbose_name="Название (EN)")
+    name_jp = models.CharField(max_length=200, blank=True, verbose_name="Название (JP)")
     image = models.ImageField(blank=True, verbose_name="Изображение")
     description = models.TextField(blank=True, verbose_name="Описание")
     element_types = models.ManyToManyField(PokemonElementType, related_name="elements", verbose_name="Стихия")

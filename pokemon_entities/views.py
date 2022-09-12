@@ -59,7 +59,7 @@ def show_all_pokemons(request):
         pokemons_on_page.append({
             'pokemon_id': pokemon.id,
             'img_url': request.build_absolute_uri(pokemon.image.url),
-            'title_ru': pokemon.text,
+            'title_ru': pokemon.name,
         })
 
     return render(request, 'mainpage.html', context={
@@ -72,9 +72,9 @@ def show_pokemon(request, pokemon_id):
     pokemon = get_object_or_404(Pokemon, pk=pokemon_id)
 
     pokemon_context = {
-        "title_ru": pokemon.text,
-        "title_en": pokemon.text_en,
-        "title_jp": pokemon.text_jp,
+        "title_ru": pokemon.name,
+        "title_en": pokemon.name_en,
+        "title_jp": pokemon.name_jp,
         "img_url": request.build_absolute_uri(pokemon.image.url),
         "description": pokemon.description,
         "element_types": pokemon.element_types.all()
@@ -82,14 +82,14 @@ def show_pokemon(request, pokemon_id):
     if pokemon.previous_evolution:
         pokemon_context["previous_evolution"] = {
             "pokemon_id": pokemon.previous_evolution.pk,
-            "title_ru": pokemon.previous_evolution.text,
+            "title_ru": pokemon.previous_evolution.name,
             "img_url": request.build_absolute_uri(pokemon.previous_evolution.image.url)
         }
     next_evolution = Pokemon.objects.filter(previous_evolution=pokemon)
     if next_evolution:
         pokemon_context["next_evolution"] = {
             "pokemon_id": next_evolution[0].pk,
-            "title_ru": next_evolution[0].text,
+            "title_ru": next_evolution[0].name,
             "img_url": request.build_absolute_uri(next_evolution[0].image.url)
         }
 
