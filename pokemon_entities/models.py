@@ -20,7 +20,7 @@ class Pokemon(models.Model):
     description = models.TextField(blank=True, verbose_name="Описание")
     element_types = models.ManyToManyField(PokemonElementType, related_name="elements", verbose_name="Стихия")
     previous_evolution = models.ForeignKey("Pokemon", on_delete=models.SET_NULL,
-        blank=True, null=True, verbose_name="Предыдушая эволюция", related_name="prev_evolutions")
+        blank=True, null=True, verbose_name="Предыдушая эволюция", related_name="next_evolutions")
 
     def __str__(self):
         return self.name
